@@ -20,13 +20,13 @@ with open('./package.json') as package:
 setup(
     name='wagtailyoast',
     version=version,
-    url='https://github.com/Aleksi44/wagtail_seo',
+    url='https://github.com/Aleksi44/wagtailyoast',
     author="Alexis Le Baron",
     author_email="alexis@stationspatiale.com",
     description="Yoast For Wagtail",
     long_description=long_description,
     keywords="wagtail yoast seo",
-    license='BSD',
+    license='GPL-3.0',
     install_requires=[
         'django==3.0.9',
         'wagtail==2.10.1',
