@@ -9,9 +9,6 @@ PROJECT_DIR = os.path.dirname(__file__)
 
 sys.path.append(os.path.join(PROJECT_DIR, 'src'))
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
 with open('./package.json') as package:
     data = json.load(package)
     version = data['version']
@@ -24,7 +21,6 @@ setup(
     author="Alexis Le Baron",
     author_email="alexis@stationspatiale.com",
     description="Yoast For Wagtail",
-    long_description=long_description,
     keywords="wagtail yoast seo",
     license='GPL-3.0',
     install_requires=[
