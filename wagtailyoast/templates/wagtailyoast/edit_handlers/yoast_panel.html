@@ -1,0 +1,11 @@
+<div id="yoast_panel">
+    {% include 'wagtailadmin/edit_handlers/object_list.html' %}
+
+    <div id="yoast_title" data-field="{{ self.title_field }}"></div>
+    <div id="yoast_search_description" data-field="{{ self.search_description }}"></div>
+    <div id="yoast_slug" data-field="{{ self.slug }}"></div>
+
+    {% include 'wagtailyoast/edit_handlers/yoast_list.html' with list_title="SEO" list_id="results_seo" %}
+    {% include 'wagtailyoast/edit_handlers/yoast_list.html' with list_title="Readability" list_id="results_readability" %}
+
+</div>

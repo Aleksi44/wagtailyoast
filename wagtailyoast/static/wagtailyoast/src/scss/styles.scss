@@ -1,0 +1,18 @@
+#yoast_panel {
+  #yoast_results_readability, #yoast_results_seo {
+    margin: 50px 0;
+    display: inline-block;
+  }
+
+  .icon-cross {
+    color: red;
+  }
+
+  .icon-tick {
+    color: green;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+}

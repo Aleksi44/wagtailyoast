@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "airbnb-base"
+  ],
+  "plugins": [
+    "babel"
+  ],
+  "parser": "babel-eslint",
+  "rules": {
+    "no-unused-expressions": 0,
+    "no-nested-ternary": 0,
+    "linebreak-style": 0,
+    "react/prop-types": 0
+  },
+  "globals": {
+    "document": false,
+    "$": false,
+    "jQuery": false
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}
