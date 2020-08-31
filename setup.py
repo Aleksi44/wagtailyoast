@@ -1,18 +1,16 @@
 #!/usr/bin/env python
 import os
-import sys
 from setuptools import find_packages, setup
 import json
 
-
 PROJECT_DIR = os.path.dirname(__file__)
 
-sys.path.append(os.path.join(PROJECT_DIR, 'src'))
+with open("README.rst", "r") as fh:
+    long_description = fh.read()
 
 with open('./package.json') as package:
     data = json.load(package)
     version = data['version']
-
 
 setup(
     name='wagtailyoast',
@@ -21,6 +19,7 @@ setup(
     author="Alexis Le Baron",
     author_email="alexis@stationspatiale.com",
     description="Yoast For Wagtail",
+    long_description=long_description,
     keywords="wagtail yoast seo",
     license='GPL-3.0',
     install_requires=[
