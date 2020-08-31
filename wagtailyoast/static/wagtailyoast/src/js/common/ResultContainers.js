@@ -24,12 +24,23 @@ export default class ResultContainers {
     return result.score >= 9;
   }
 
-  static addResult($container, result) {
+  static getStatusContainer($container, result) {
     const $success = $container.find('.success');
     const $errors = $container.find('.errors');
-    const $dest = ResultContainers.isSuccessResult(result) ? $success : $errors;
-    if (result.score !== 0) {
-      $dest.append(
+    return ResultContainers.isSuccessResult(result) ? $success : $errors;
+  }
+
+  static filterUnwantedResult(result) {
+    // FIXME: singleH1 does not work, fix it with Yoast
+    const unwanted = [
+      'singleH1',
+    ];
+    return unwanted.indexOf(result._identifier) === -1;
+  }
+
+  static addResult($container, result) {
+    if (result.score !== 0 && ResultContainers.filterUnwantedResult(result)) {
+      ResultContainers.getStatusContainer($container, result).append(
         `<li>${ResultContainers.scoreIcon(result)} ${result.text}</li>`,
       );
     }

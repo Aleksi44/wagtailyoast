@@ -10,9 +10,18 @@ export default class Panel extends WithContext {
   }
 
   static async getPreviewPageContent() {
-    const $btn = $('button[class^="button action-preview"');
+    const $form = $('#page-edit-form');
+    const $previewBtn = $('button[class^="button action-preview"');
+    const previewUrl = $previewBtn.data('action');
+    await $.ajax({
+      url: previewUrl,
+      method: 'POST',
+      data: new FormData($form[0]),
+      processData: false,
+      contentType: false,
+    });
     const result = await $.ajax({
-      url: $btn.data('action'),
+      url: previewUrl,
       type: 'GET',
     });
     return result;
@@ -47,11 +56,20 @@ export default class Panel extends WithContext {
         this.$yoastKeywords,
       ];
 
+      // Key up of inputs (keywords)
+
       Array.prototype.forEach.call(keyUpElements, ($el) => {
         $el.on('keyup', async (e) => {
           e.preventDefault();
           await this.syncPanel();
         });
+      });
+
+      // Click on yoast pannel
+
+      $('li[aria-controls="tab-yoast"]').click(async (e) => {
+        e.preventDefault();
+        await this.syncPanel();
       });
 
       this.syncPanel();
