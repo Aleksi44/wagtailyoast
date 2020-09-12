@@ -23,8 +23,8 @@ setup(
     keywords="wagtail yoast seo",
     license='GPL-3.0',
     install_requires=[
-        'django==3.0.9',
-        'wagtail==2.10.1',
+        'django>=3.0.9',
+        'wagtail>=2.10.1',
     ],
     platforms=['linux'],
     packages=find_packages(),
