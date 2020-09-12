@@ -18,4 +18,4 @@ deploy:
 
 patch:
 	npm version patch
-	git push —-tags origin master
+	git push --tags origin master
