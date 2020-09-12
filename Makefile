@@ -15,3 +15,7 @@ deploy:
 	yarn build
 	python setup.py sdist bdist_wheel
 	python -m twine upload dist/*
+
+patch:
+	npm version patch
+	git push —-tags origin master
