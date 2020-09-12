@@ -76,7 +76,7 @@ class Command(BaseCommand):
         )
         site.save()
 
-        # -------------------------------- Examples --------------------------------
+        # Examples ------------------------------------------------------------
 
         # Goal : get perfect score with yoast
 

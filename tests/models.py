@@ -18,7 +18,10 @@ class TestPage(Page):
     keywords = models.CharField(default='', blank=True, max_length=100)
 
     edit_handler = TabbedInterface([
-        ObjectList(Page.content_panels + [StreamFieldPanel('body')], heading=gettext_lazy('Content')),
+        ObjectList(
+            Page.content_panels + [StreamFieldPanel('body')],
+            heading=gettext_lazy('Content')
+        ),
         ObjectList(Page.promote_panels, heading=gettext_lazy('Promotion')),
         ObjectList(Page.settings_panels, heading=gettext_lazy('Settings')),
         YoastPanel(

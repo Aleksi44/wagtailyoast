@@ -15,13 +15,13 @@ class TextBlock(RichTextBlock):
     def mock(self, content):
         return {
             'type': 'text',
-            'value': content
+            'value': str.strip(content)
         }
 
 
 class ImageBlock(ImageChooserBlock):
     def mock(self, title):
-        url = constants.URL_IMAGE_MOCK_1
+        url = str.strip(constants.URL_IMAGE_MOCK_1)
         filename = "%s.png" % title
         try:
             ret = Image.objects.get(title=title)
@@ -32,6 +32,8 @@ class ImageBlock(ImageChooserBlock):
                 title=title,
                 file=file
             )
+            import pdb
+            pdb.set_trace()
             ret.save()
         return {
             'type': 'image',

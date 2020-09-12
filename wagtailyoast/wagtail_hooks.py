@@ -23,7 +23,11 @@ def yoast_panel_js():
     )
     js_exec = format_html(
         "<script>{}</script>",
-        mark_safe("$(function() {const panel = new Yoast.Panel(%s);panel.init();});" % cxt)
+        mark_safe(
+            "$(function() {"
+            "const panel = new Yoast.Panel(%s);"
+            "panel.init();"
+            "});" % cxt)
     )
     return js_includes + js_exec
 
