@@ -35,6 +35,7 @@ export default class ResultContainers {
     const unwanted = [
       'singleH1',
     ];
+    // eslint-disable-next-line no-underscore-dangle
     return unwanted.indexOf(result._identifier) === -1;
   }
 
