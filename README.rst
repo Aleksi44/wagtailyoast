@@ -2,6 +2,12 @@
 Wagtail Yoast SEO
 *****************
 
+.. image:: https://img.shields.io/pypi/v/wagtailyoast
+    :target: https://pypi.org/project/wagtailyoast/
+
+.. image:: https://img.shields.io/pypi/pyversions/wagtailyoast
+    :target: https://pypi.org/project/wagtailyoast/
+
 `Yoastseo <https://github.com/Yoast/javascript/tree/master/packages/yoastseo>`_ + `Wagtail <https://github.com/wagtail/wagtail>`_ = 🚀
 
 Tested with :

@@ -29,4 +29,15 @@ setup(
     platforms=['linux'],
     packages=find_packages(),
     include_package_data=True,
+    classifiers=[
+        'Environment :: Web Environment',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Operating System :: OS Independent',
+        'Topic :: Software Development'
+    ]
 )
