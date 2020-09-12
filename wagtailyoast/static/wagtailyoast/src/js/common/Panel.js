@@ -3,16 +3,28 @@ import WithContext from './WithContext';
 import ResultContainers from './ResultContainers';
 
 export default class Panel extends WithContext {
+  /**
+   * Controller of Yoast Panel
+   *
+   * @param {object} context The context of wagtailyoast/context.py
+   */
   constructor(context) {
     super(context);
     this.workerUrl = `${this.baseUrl}/static/wagtailyoast/dist/js/yoastworker${this.context.version}.js`;
     this.worker = new AnalysisWorkerWrapper(createWorker(this.workerUrl));
   }
 
+  /**
+   * Get HTML preview of wagtail page
+   *
+   * @returns {string}
+   */
   static async getPreviewPageContent() {
     const $form = $('#page-edit-form');
     const $previewBtn = $('button[class^="button action-preview"');
     const previewUrl = $previewBtn.data('action');
+
+    // Submit wagtail edit form with no processing data
     await $.ajax({
       url: previewUrl,
       method: 'POST',
@@ -20,6 +32,8 @@ export default class Panel extends WithContext {
       processData: false,
       contentType: false,
     });
+
+    // Get content of preview page
     const result = await $.ajax({
       url: previewUrl,
       type: 'GET',
@@ -27,6 +41,11 @@ export default class Panel extends WithContext {
     return result;
   }
 
+  /**
+   * Refresh Yoast Panel UI
+   *
+   * @returns {void}
+   */
   async syncPanel() {
     const paper = new Paper(await Panel.getPreviewPageContent(), {
       keyword: this.$yoastKeywords.val(),
@@ -39,6 +58,11 @@ export default class Panel extends WithContext {
     containers.sync();
   }
 
+  /**
+   * Initialize worker and events
+   *
+   * @returns {void}
+   */
   init() {
     this.worker.initialize({
       locale: this.context.locale,
@@ -61,17 +85,20 @@ export default class Panel extends WithContext {
       Array.prototype.forEach.call(keyUpElements, ($el) => {
         $el.on('keyup', async (e) => {
           e.preventDefault();
+          // Refresh UI
           await this.syncPanel();
         });
       });
 
-      // Click on yoast pannel
+      // Click on panel heading
 
       $('li[aria-controls="tab-yoast"]').click(async (e) => {
         e.preventDefault();
+        // Refresh UI
         await this.syncPanel();
       });
 
+      // Refresh UI
       this.syncPanel();
     });
   }

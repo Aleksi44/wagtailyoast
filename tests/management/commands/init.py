@@ -13,6 +13,9 @@ from tests import constants
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        """
+        Reset and initialize test data
+        """
         Site.objects.all().delete()
         Page.objects.all().delete()
         Image.objects.all().delete()
@@ -38,7 +41,7 @@ class Command(BaseCommand):
                 user.groups.add(group)
             user.save()
 
-        #  RootPage, HomePage, Site
+        #  Create RootPage, HomePage, Site
 
         page_content_type, created = ContentType.objects.get_or_create(
             model='page',
@@ -76,7 +79,7 @@ class Command(BaseCommand):
         )
         site.save()
 
-        # Examples ------------------------------------------------------------
+        # Page Examples -------------------------------------------------------
 
         # Goal : get perfect score with yoast
 

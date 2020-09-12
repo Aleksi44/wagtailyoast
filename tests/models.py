@@ -10,6 +10,11 @@ from wagtailyoast.edit_handlers import YoastPanel
 from .blocks import TextBlock, ImageBlock
 
 
+# =================================
+# TestPage used for testing purpose
+# =================================
+
+
 class TestPage(Page):
     body = StreamField([
         ('text', TextBlock()),

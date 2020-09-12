@@ -8,6 +8,11 @@ from . import context
 
 @hooks.register('insert_editor_js')
 def yoast_panel_js():
+    """
+    Add Yoast javascript files : Analysis and Worker
+
+    :return: HTML <scripts>
+    """
     cxt = json.dumps({
         'version': context.VERSION,
         'locale': context.LOCALE,
@@ -34,6 +39,11 @@ def yoast_panel_js():
 
 @hooks.register('insert_editor_css')
 def yoast_panel_css():
+    """
+    Add Yoast styles CSS files
+
+    :return: HTML <link>
+    """
     css_files = [
         'wagtailyoast/dist/css/styles%s.css' % context.VERSION,
     ]

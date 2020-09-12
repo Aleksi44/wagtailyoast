@@ -9,6 +9,15 @@ class YoastPanel(ObjectList):
     def __init__(self, keywords='keywords', title='seo_title',
                  search_description='search_description', slug='slug',
                  heading='Yoast', *args, **kwargs):
+        """
+        Panel used by a wagtail Page
+
+        :param keywords: Default keywords of the page.
+        :param title: 'Search Engine Friendly' title.
+        :param search_description: 'Search Engine Friendly' description.
+        :param slug: URL of the page.
+        :param heading: Heading of pannel
+        """
         #  TODO: Test if fields exist
 
         self.title_field = title

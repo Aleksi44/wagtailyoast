@@ -1,3 +1,7 @@
+# ==================================
+# Constants used for testing purpose
+# ==================================
+
 RICH_TEXT_FEATURES = [
     'h1',
     'h2',

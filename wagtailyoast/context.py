@@ -3,7 +3,9 @@ import json
 import pkg_resources
 from django.conf import settings
 
-# Version
+# =======================================
+# Context variables passed for javascript
+# =======================================
 
 try:
     #  Production part

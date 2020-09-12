@@ -1,9 +1,16 @@
 <div id="yoast_panel">
+
+    {% comment %} Panel Form {% endcomment %}
+
     {% include 'wagtailadmin/edit_handlers/object_list.html' %}
+
+    {% comment %} Pass YoastPanel fields to javascript {% endcomment %}
 
     <div id="yoast_title" data-field="{{ self.title_field }}"></div>
     <div id="yoast_search_description" data-field="{{ self.search_description }}"></div>
     <div id="yoast_slug" data-field="{{ self.slug }}"></div>
+
+    {% comment %} Include results of Yoast {% endcomment %}
 
     {% include 'wagtailyoast/edit_handlers/yoast_list.html' with list_title="SEO" list_id="results_seo" %}
     {% include 'wagtailyoast/edit_handlers/yoast_list.html' with list_title="Readability" list_id="results_readability" %}
