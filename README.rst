@@ -86,9 +86,9 @@ Run Django Server
 
 ::
 
-    python manage.py migrate --settings='settings'
-    python manage.py init --settings=settings
-    python manage.py runserver 0.0.0.0:4243 --settings='settings'
+    python manage.py migrate
+    python manage.py init
+    python manage.py runserver 0.0.0.0:4243
 
 
 Run Webpack Server
