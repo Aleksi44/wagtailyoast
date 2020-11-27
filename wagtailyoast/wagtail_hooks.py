@@ -10,7 +10,6 @@ from . import context
 def yoast_panel_js():
     """
     Add Yoast javascript files : Analysis and Worker
-
     :return: HTML <scripts>
     """
     cxt = json.dumps({
@@ -41,7 +40,6 @@ def yoast_panel_js():
 def yoast_panel_css():
     """
     Add Yoast styles CSS files
-
     :return: HTML <link>
     """
     css_files = [

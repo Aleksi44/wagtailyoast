@@ -1,14 +1,14 @@
 start:
-	python manage.py runserver 0.0.0.0:4243 --settings='settings'
+	python manage.py runserver 0.0.0.0:4243
 
 shell:
-	python manage.py shell --settings='settings'
+	python manage.py shell
 
 mm:
-	python manage.py migrate --settings='settings'
+	python manage.py migrate
 
 superuser:
-	python manage.py createsuperuser --settings='settings'
+	python manage.py createsuperuser
 
 deploy:
 	rm -rf dist/*
