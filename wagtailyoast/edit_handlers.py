@@ -33,3 +33,10 @@ class YoastPanel(ObjectList):
             ], heading="Page")
         ]
         super().__init__(children=children, heading=heading)
+
+    def clone_kwargs(self):
+        kwargs = super().clone_kwargs()
+        kwargs['title'] = self.title_field
+        kwargs['search_description'] = self.search_description
+        kwargs['slug'] = self.slug
+        return kwargs
