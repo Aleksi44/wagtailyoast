@@ -35,7 +35,9 @@ class YoastPanel(ObjectList):
             field_page_panel += [
                 FieldPanel(
                     content_selector,
-                    widget=forms.TextInput(attrs={'id': 'yoast_content_selector'})
+                    widget=forms.TextInput(
+                        attrs={'id': 'yoast_content_selector'}
+                    )
                 )
             ]
         children = [MultiFieldPanel(field_page_panel, heading="Page")]
