@@ -40,9 +40,7 @@ export default class Panel extends WithContext {
     });
     if (this.$yoastContentSelector) {
       const contentSelector = this.$yoastContentSelector.val();
-      const resultFiltered = $($.parseHTML(result)).filter(contentSelector).text();
-      console.log(resultFiltered);
-      // return here the results filtered
+      return $($.parseHTML(result)).filter(contentSelector).text();
     }
     return result;
   }
