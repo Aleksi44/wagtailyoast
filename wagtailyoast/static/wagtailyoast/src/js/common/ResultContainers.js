@@ -9,6 +9,7 @@ export default class ResultContainers {
     this.results = results;
     this.readabilityContainer = $('#yoast_results_readability');
     this.seoContainer = $('#yoast_results_seo');
+
   }
 
   /**

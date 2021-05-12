@@ -19,7 +19,7 @@ export default class Panel extends WithContext {
    *
    * @returns {string}
    */
-  static async getPreviewPageContent() {
+  async getPreviewPageContent() {
     const $form = $('#page-edit-form');
     const $previewBtn = $('button[class^="button action-preview"');
     const previewUrl = $previewBtn.data('action');
@@ -38,6 +38,12 @@ export default class Panel extends WithContext {
       url: previewUrl,
       type: 'GET',
     });
+    if (this.$yoastContentSelector) {
+      const contentSelector = this.$yoastContentSelector.val();
+      const resultFiltered = $($.parseHTML(result)).filter(contentSelector).text();
+      console.log(resultFiltered);
+      // return here the results filtered
+    }
     return result;
   }
 
@@ -47,7 +53,7 @@ export default class Panel extends WithContext {
    * @returns {void}
    */
   async syncPanel() {
-    const paper = new Paper(await Panel.getPreviewPageContent(), {
+    const paper = new Paper(await this.getPreviewPageContent(), {
       keyword: this.$yoastKeywords.val(),
       title: this.$yoastTitle.val(),
       description: this.$yoastSearchDescription.val(),
@@ -72,12 +78,14 @@ export default class Panel extends WithContext {
     }).then(() => {
       this.$yoastPanel = $('#yoast_panel');
       this.$yoastKeywords = this.$yoastPanel.find('#yoast_keywords');
+      this.$yoastContentSelector = this.$yoastPanel.find('#yoast_content_selector');
       this.$yoastTitle = $(`#id_${this.$yoastPanel.find('#yoast_title').data('field')}`);
       this.$yoastSearchDescription = $(`#id_${this.$yoastPanel.find('#yoast_search_description').data('field')}`);
       this.$yoastSlug = $(`#id_${this.$yoastPanel.find('#yoast_slug').data('field')}`);
 
       const keyUpElements = [
         this.$yoastKeywords,
+        this.$yoastContentSelector,
       ];
 
       // Key up of inputs (keywords)
