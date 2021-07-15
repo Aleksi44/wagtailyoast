@@ -10,7 +10,7 @@ export default class Panel extends WithContext {
    */
   constructor(context) {
     super(context);
-    this.workerUrl = `${this.baseUrl}/static/wagtailyoast/dist/js/yoastworker${this.context.version}.js`;
+    this.workerUrl = `${this.baseUrl}${this.context.staticUrl}wagtailyoast/dist/js/yoastworker${this.context.version}.js`;
     this.worker = new AnalysisWorkerWrapper(createWorker(this.workerUrl));
   }
 

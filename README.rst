@@ -33,10 +33,11 @@ Add wagtailyoast to django apps installed :
         'wagtailyoast',
     ]
 
-Add locale used for Yoast in your `settings.py` :
+Add locale used for Yoast and make sure you have STATIC_URL set up in your `settings.py` :
 ::
 
     WY_LOCALE = 'en_US'
+    STATIC_URL = '/static/'
 
 
 Add YoastPannel to your Page models :
