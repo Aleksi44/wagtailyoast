@@ -15,6 +15,7 @@ def yoast_panel_js():
     cxt = json.dumps({
         'version': context.VERSION,
         'locale': context.LOCALE,
+        'staticUrl': context.STATIC_URL,
     })
     js_files = [
         'wagtailyoast/dist/js/yoastworker%s.js' % context.VERSION,

@@ -17,3 +17,4 @@ except pkg_resources.DistributionNotFound:
         VERSION = data['version']
 
 LOCALE = settings.WY_LOCALE
+STATIC_URL = settings.STATIC_URL
