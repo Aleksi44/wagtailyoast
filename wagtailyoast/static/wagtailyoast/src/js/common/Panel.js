@@ -92,7 +92,7 @@ export default class Panel extends WithContext {
 
       // Click on panel heading
 
-      $('li[aria-controls="tab-yoast"]').click(async (e) => {
+      $('[aria-controls="tab-yoast"]').click(async (e) => {
         e.preventDefault();
         // Refresh UI
         await this.syncPanel();
