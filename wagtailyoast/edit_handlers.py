@@ -1,10 +1,12 @@
 from django import forms
 from wagtail.admin.edit_handlers import ObjectList
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import PanelGroup
 
 
 class YoastPanel(ObjectList):
-    template = "wagtailyoast/edit_handlers/yoast_panel.html"
+    class BoundPanel(PanelGroup.BoundPanel):
+        template_name = "wagtailyoast/edit_handlers/yoast_panel.html"
 
     def __init__(self, keywords='keywords', title='seo_title',
                  search_description='search_description', slug='slug',
