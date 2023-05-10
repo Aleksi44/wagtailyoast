@@ -1,7 +1,7 @@
 import json
 from django.utils.html import format_html, format_html_join, mark_safe
 from django.templatetags.static import static
-from wagtail.core import hooks
+from wagtail import hooks
 
 from . import context
 
