@@ -21,6 +21,7 @@ class TestPage(Page):
         ('image', ImageBlock()),
     ], blank=True)
     keywords = models.CharField(default='', blank=True, max_length=100)
+    content_selector = models.CharField(default='', blank=True, max_length=100)
 
     edit_handler = TabbedInterface([
         ObjectList(
@@ -33,6 +34,7 @@ class TestPage(Page):
             keywords='keywords',
             title='seo_title',
             search_description='search_description',
-            slug='slug'
+            slug='slug',
+            content_selector='content_selector'
         ),
     ])
