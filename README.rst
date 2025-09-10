@@ -16,8 +16,6 @@ Tested with :
 - wagtail==2.10.1
 - yoastseo:1.80.0
 
-.. image:: https://d271q0ph7te9f8.cloudfront.net/www/images/screenshot-wagtail-yoast-.original.png
-
 Setup
 #####
 
