@@ -85,6 +85,17 @@ class EditorHookTests(SimpleTestCase):
         html = wagtail_hooks.yoast_panel_css()
         self.assertIn("styles%s.css" % context.VERSION, html)
 
+    def test_hooks_are_registered_on_hooks_wagtail_still_renders(self):
+        """`insert_editor_css` is no longer rendered by any Wagtail
+        template, so registering the stylesheet there loaded nothing."""
+        from wagtail import hooks
+
+        css_hooks = hooks.get_hooks("insert_global_admin_css")
+        self.assertIn(wagtail_hooks.yoast_panel_css, css_hooks)
+
+        js_hooks = hooks.get_hooks("insert_editor_js")
+        self.assertIn(wagtail_hooks.yoast_panel_js, js_hooks)
+
 
 class YoastPanelTests(SimpleTestCase):
 
