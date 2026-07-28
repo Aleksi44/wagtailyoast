@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install flake8
+        run: pip install "flake8>=3.8.3"
+      - name: Run flake8
+        run: flake8
+
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.9"
+            wagtail: ">=5.2,<5.3"
+          - python-version: "3.11"
+            wagtail: ">=6.3,<6.4"
+          - python-version: "3.12"
+            wagtail: ">=7.0"
+          - python-version: "3.13"
+            wagtail: ">=7.0"
+    name: tests (py${{ matrix.python-version }}, wagtail${{ matrix.wagtail }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package and Wagtail
+        run: pip install "wagtail${{ matrix.wagtail }}" -e .
+      - name: Run tests
+        run: python -m django test --settings=test_settings -v 2
