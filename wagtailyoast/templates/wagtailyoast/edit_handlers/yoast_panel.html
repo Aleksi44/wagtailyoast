@@ -2,13 +2,13 @@
 
     {% comment %} Panel Form {% endcomment %}
 
-    {% include 'wagtailadmin/edit_handlers/object_list.html' %}
+    {% include 'wagtailadmin/panels/object_list.html' %}
 
     {% comment %} Pass YoastPanel fields to javascript {% endcomment %}
 
-    <div id="yoast_title" data-field="{{ self.title_field }}"></div>
-    <div id="yoast_search_description" data-field="{{ self.search_description }}"></div>
-    <div id="yoast_slug" data-field="{{ self.slug }}"></div>
+    <div id="yoast_title" data-field="{{ self.panel.title_field }}"></div>
+    <div id="yoast_search_description" data-field="{{ self.panel.search_description }}"></div>
+    <div id="yoast_slug" data-field="{{ self.panel.slug }}"></div>
 
     {% comment %} Include results of Yoast {% endcomment %}
 

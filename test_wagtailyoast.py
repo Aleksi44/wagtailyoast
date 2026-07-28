@@ -16,10 +16,28 @@ from importlib.metadata import version as installed_version
 from unittest import mock
 
 from django.conf import settings
-from django.test import SimpleTestCase
+from django.contrib.auth.models import AnonymousUser
+from django.db import models
+from django.test import RequestFactory, SimpleTestCase
+
+from wagtail.models import Page
 
 from wagtailyoast import context, wagtail_hooks
 from wagtailyoast.edit_handlers import YoastPanel
+
+
+class ProbeModel(models.Model):
+    """Minimal model exposing the `keywords` field YoastPanel expects.
+
+    Test-only; never migrated or saved. A plain model (not a Page
+    subclass) keeps the migration-less test app out of Django's
+    migration state, and the panel machinery is model-agnostic.
+    """
+
+    keywords = models.CharField(max_length=255, blank=True, default="")
+
+    class Meta:
+        app_label = "wagtailyoast"
 
 
 class ContextTests(SimpleTestCase):
@@ -86,3 +104,56 @@ class YoastPanelTests(SimpleTestCase):
         self.assertEqual(kwargs["title"], "custom_title")
         self.assertEqual(kwargs["search_description"], "custom_desc")
         self.assertEqual(kwargs["slug"], "custom_slug")
+
+
+class YoastPanelRenderTests(SimpleTestCase):
+    """The panel must render its own template, not a plain ObjectList.
+
+    Wagtail's post-4.0 panels API ignores the legacy class-level
+    `template` attribute, which left the panel rendering as a bare
+    ObjectList (no #yoast_panel markup for the JS to attach to) on
+    every modern Wagtail - the breakage reported in issue #8.
+    """
+
+    def _bound_panel(self):
+        panel_def = YoastPanel().bind_to_model(ProbeModel)
+        form_class = panel_def.get_form_class()
+        instance = ProbeModel()
+        form = form_class(instance=instance)
+        request = RequestFactory().get("/")
+        request.user = AnonymousUser()
+        return panel_def.get_bound_panel(
+            instance=instance, request=request, form=form,
+        )
+
+    def test_bound_panel_uses_the_yoast_template(self):
+        bound = self._bound_panel()
+        self.assertEqual(
+            bound.template_name,
+            "wagtailyoast/edit_handlers/yoast_panel.html",
+        )
+
+    def test_rendered_panel_contains_the_yoast_markup(self):
+        html = str(self._bound_panel().render_html({}))
+        self.assertIn('id="yoast_panel"', html)
+        self.assertIn('id="yoast_title" data-field="seo_title"', html)
+        self.assertIn(
+            'id="yoast_search_description"'
+            ' data-field="search_description"',
+            html,
+        )
+        self.assertIn('id="yoast_slug" data-field="slug"', html)
+        self.assertIn('id="yoast_results_seo"', html)
+        self.assertIn('id="yoast_results_readability"', html)
+
+    def test_rendered_panel_contains_the_keywords_form_field(self):
+        html = str(self._bound_panel().render_html({}))
+        self.assertIn('id="yoast_keywords"', html)
+
+    def test_clone_preserves_a_custom_keywords_field(self):
+        """clone_kwargs dropped `keywords`, so binding rebuilt the
+        panel against the default field name and crashed on any model
+        without a literal `keywords` field."""
+        panel_def = YoastPanel(keywords="seo_title").bind_to_model(Page)
+        form_class = panel_def.get_form_class()
+        self.assertIn("seo_title", form_class.base_fields)

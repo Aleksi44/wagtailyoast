@@ -4,7 +4,6 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 
 
 class YoastPanel(ObjectList):
-    template = "wagtailyoast/edit_handlers/yoast_panel.html"
 
     def __init__(self, keywords='keywords', title='seo_title',
                  search_description='search_description', slug='slug',
@@ -20,6 +19,7 @@ class YoastPanel(ObjectList):
         """
         #  TODO: Test if fields exist
 
+        self.keywords = keywords
         self.title_field = title
         self.search_description = search_description
         self.slug = slug
@@ -36,7 +36,11 @@ class YoastPanel(ObjectList):
 
     def clone_kwargs(self):
         kwargs = super().clone_kwargs()
+        kwargs['keywords'] = self.keywords
         kwargs['title'] = self.title_field
         kwargs['search_description'] = self.search_description
         kwargs['slug'] = self.slug
         return kwargs
+
+    class BoundPanel(ObjectList.BoundPanel):
+        template_name = "wagtailyoast/edit_handlers/yoast_panel.html"
