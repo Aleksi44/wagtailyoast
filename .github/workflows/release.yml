@@ -1,13 +1,16 @@
-name: Release
+name: Release build
 
-# Builds the frontend assets and the Python package, and publishes to
-# PyPI when a version tag is pushed (e.g. v0.0.11, as created by
-# `npm version patch`).
+# Builds the versioned frontend assets and the Python package for a
+# release, and uploads them as a workflow artifact. Publishing stays
+# exactly as it is today: download the `dist` artifact and run
+# `twine upload dist/*` with your own PyPI credentials, from any
+# machine - no Node toolchain needed anymore.
 #
-# Publishing uses PyPI Trusted Publishing (OIDC) - no tokens or secrets
-# are stored anywhere. One-time setup by the PyPI project owner:
-# add a "trusted publisher" on pypi.org for this repository with
-# workflow name release.yml (Manage project -> Publishing).
+# (If zero-touch publishing is ever wanted, this can be extended with
+# a publish job using PyPI Trusted Publishing - a tokenless, UI-only
+# authorisation on pypi.org. Deliberately not included here so that
+# nothing about how this package is published changes without the
+# owner deciding it should.)
 
 on:
   push:
@@ -63,23 +66,3 @@ jobs:
         with:
           name: dist
           path: dist/
-
-  publish:
-    needs: build
-    # Publish only for real version tags on the upstream repository -
-    # forks can run the build job for verification without touching
-    # PyPI.
-    if: >-
-      startsWith(github.ref, 'refs/tags/v') &&
-      github.repository == 'Aleksi44/wagtailyoast'
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
-      - name: Publish to PyPI (trusted publishing)
-        uses: pypa/gh-action-pypi-publish@release/v1
