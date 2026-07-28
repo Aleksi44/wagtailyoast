@@ -1,5 +1,6 @@
 include *.rst
 include AUTHORS
+include package.json
 include LICENSE
 recursive-include wagtailyoast/templates *.html
 recursive-include wagtailyoast/static *
