@@ -12,6 +12,7 @@ superuser:
 
 deploy:
 	rm -rf dist/*
+	rm -rf wagtailyoast/static/wagtailyoast/dist
 	yarn build
 	python setup.py sdist bdist_wheel
 	python -m twine upload dist/*
