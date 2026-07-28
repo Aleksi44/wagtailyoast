@@ -1,0 +1,85 @@
+name: Release
+
+# Builds the frontend assets and the Python package, and publishes to
+# PyPI when a version tag is pushed (e.g. v0.0.11, as created by
+# `npm version patch`).
+#
+# Publishing uses PyPI Trusted Publishing (OIDC) - no tokens or secrets
+# are stored anywhere. One-time setup by the PyPI project owner:
+# add a "trusted publisher" on pypi.org for this repository with
+# workflow name release.yml (Manage project -> Publishing).
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 12 is intentional: the asset pipeline pins node-sass
+      # 4.13.1, whose prebuilt bindings stop at Node 13 (building it
+      # from source needs Python 2). Node 12 is the newest runtime
+      # with working prebuilt bindings. If actions/setup-node ever
+      # drops Node 12, the pipeline needs porting to dart-sass first.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "12"
+
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build versioned frontend assets
+        run: yarn build
+
+      - name: Check built assets match package.json version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          DIST=wagtailyoast/static/wagtailyoast/dist
+          test -f "$DIST/js/yoastworker$VERSION.js"
+          test -f "$DIST/js/yoastanalysis$VERSION.js"
+          test -f "$DIST/css/styles$VERSION.css"
+          COUNT=$(find "$DIST" -type f | wc -l)
+          echo "dist contains $COUNT files for version $VERSION"
+          find "$DIST" -type f | grep -v "$VERSION" && {
+            echo "ERROR: dist contains files from other versions"; exit 1;
+          } || true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build the Python package
+        run: |
+          pip install build twine
+          python -m build
+          twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    # Publish only for real version tags on the upstream repository -
+    # forks can run the build job for verification without touching
+    # PyPI.
+    if: >-
+      startsWith(github.ref, 'refs/tags/v') &&
+      github.repository == 'Aleksi44/wagtailyoast'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI (trusted publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
