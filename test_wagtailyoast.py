@@ -18,7 +18,7 @@ from unittest import mock
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.db import models
-from django.test import RequestFactory, SimpleTestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase
 
 from wagtail.models import Page
 
@@ -168,3 +168,64 @@ class YoastPanelRenderTests(SimpleTestCase):
         panel_def = YoastPanel(keywords="seo_title").bind_to_model(Page)
         form_class = panel_def.get_form_class()
         self.assertIn("seo_title", form_class.base_fields)
+
+
+class AdminEditViewTests(TestCase):
+    """End-to-end checks against a real Wagtail admin edit view.
+
+    The unit tests above assert on the panel rendered in isolation and
+    on hook registration. Both are proxies: they encode today's
+    answers (which template attribute, which hook name) rather than
+    the requirement. These tests assert the requirement itself - that
+    an editor opening a page actually gets the Yoast panel, its
+    stylesheet and its scripts - so they keep holding whatever Wagtail
+    renames next.
+
+    Two bugs that shipped for years would have been caught here:
+    the panel not rendering at all on the post-4.0 panels API, and the
+    stylesheet registered on a hook Wagtail no longer renders.
+    """
+
+    def setUp(self):
+        from django.contrib.auth import get_user_model
+        from wagtail.models import Page
+
+        from test_app.models import YoastTestPage
+
+        User = get_user_model()
+        self.user = User.objects.create_superuser(
+            "editor", "editor@example.com", "password",
+        )
+        home = Page.objects.filter(depth=2).first()
+        self.page = YoastTestPage(
+            title="SEO test page", slug="seo-test-page", keywords="wagtail",
+        )
+        home.add_child(instance=self.page)
+        self.client.force_login(self.user)
+
+    def _edit_html(self):
+        response = self.client.get(
+            "/admin/pages/%d/edit/" % self.page.pk,
+        )
+        self.assertEqual(response.status_code, 200)
+        return response.content.decode()
+
+    def test_panel_markup_is_present_in_the_edit_view(self):
+        html = self._edit_html()
+        self.assertIn('id="yoast_panel"', html)
+        self.assertIn('id="yoast_title"', html)
+        self.assertIn('id="yoast_results_seo"', html)
+        self.assertIn('id="yoast_results_readability"', html)
+        self.assertIn('id="yoast_keywords"', html)
+
+    def test_scripts_are_included_in_the_edit_view(self):
+        html = self._edit_html()
+        self.assertIn("yoastworker%s.js" % context.VERSION, html)
+        self.assertIn("yoastanalysis%s.js" % context.VERSION, html)
+        self.assertIn("new Yoast.Panel(", html)
+
+    def test_stylesheet_is_included_in_the_edit_view(self):
+        """Regression: registered on `insert_editor_css`, which Wagtail
+        no longer renders, so the panel loaded unstyled."""
+        html = self._edit_html()
+        self.assertIn("styles%s.css" % context.VERSION, html)
