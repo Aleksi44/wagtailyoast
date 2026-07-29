@@ -39,6 +39,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install package and Wagtail
-        run: pip install "wagtail${{ matrix.wagtail }}" -e .
-      - name: Run tests
-        run: python -m django test --settings=test_settings -v 2
+        run: pip install "wagtail${{ matrix.wagtail }}" coverage -e .
+      - name: Run tests under coverage
+        run: coverage run -m django test --settings=test_settings -v 2
+      - name: Coverage report
+        run: coverage report
