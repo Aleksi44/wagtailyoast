@@ -44,3 +44,36 @@ jobs:
         run: coverage run -m django test --settings=test_settings -v 2
       - name: Coverage report
         run: coverage report
+
+  demo:
+    # The demo project (settings.py + the `tests` app) is the dev
+    # environment the README documents. It is not shipped to users, but
+    # it rotted unnoticed for years - every module still imported
+    # `wagtail.core`, removed in Wagtail 5 - so `manage.py migrate`
+    # crashed for anyone following the README. This job keeps it honest.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.9"
+            wagtail: ">=5.2,<5.3"
+          - python-version: "3.13"
+            wagtail: ">=7.0"
+    name: demo project (py${{ matrix.python-version }}, wagtail${{ matrix.wagtail }})
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package and demo requirements
+        run: pip install "wagtail${{ matrix.wagtail }}" requests -e .
+      - name: Migrate the demo project
+        run: python manage.py migrate --noinput
+      - name: Run system checks
+        run: python manage.py check
+      - name: Load the seed command
+        # `init` itself downloads a mock image, so it is not run here -
+        # a network hiccup should not fail CI. Loading the command still
+        # catches import-level breakage in tests/management and tests/blocks.
+        run: python manage.py help init > /dev/null

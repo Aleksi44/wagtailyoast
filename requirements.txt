@@ -3,3 +3,4 @@ django>=4.2
 wagtail>=5.2
 flake8>=3.8.3
 coverage
+requests

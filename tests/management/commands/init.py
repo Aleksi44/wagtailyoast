@@ -2,7 +2,7 @@ import json
 from django.contrib.auth.models import Group, User
 from django.core.management.base import BaseCommand
 from django.contrib.contenttypes.models import ContentType
-from wagtail.core.models import Page, Site
+from wagtail.models import Page, Site
 from wagtail.images.models import Image
 
 from tests.models import TestPage
