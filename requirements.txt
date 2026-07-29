@@ -1,3 +1,5 @@
-django>=3.0.9
-wagtail>=2.10.1
+# Development requirements. Runtime dependencies live in setup.py.
+django>=4.2
+wagtail>=5.2
 flake8>=3.8.3
+coverage

@@ -6,9 +6,7 @@ branch = true
 [report]
 show_missing = true
 skip_covered = false
-# Fail below the level the suite currently reaches, so a drop is loud.
-# The shortfall from 100% is context.py's pre-3.8 import fallback,
-# which no Python in the CI matrix (3.9+) can reach.
-fail_under = 90
+# The suite covers the package fully; keep it that way.
+fail_under = 100
 exclude_lines =
     pragma: no cover

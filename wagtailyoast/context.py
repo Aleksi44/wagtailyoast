@@ -1,15 +1,8 @@
 import os
 import json
+from importlib.metadata import PackageNotFoundError, version
+
 from django.conf import settings
-
-try:  # Python 3.8+
-    from importlib.metadata import PackageNotFoundError, version
-except ImportError:  # Python < 3.8
-    from pkg_resources import DistributionNotFound as PackageNotFoundError
-    from pkg_resources import get_distribution
-
-    def version(distribution_name):
-        return get_distribution(distribution_name).version
 
 # =======================================
 # Context variables passed for javascript
