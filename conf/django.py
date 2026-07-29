@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'wagtail.images',
     'wagtail.search',
     'wagtail.admin',
-    'wagtail.core',
+    'wagtail',
     'wagtail.contrib.settings',
     'wagtail.contrib.frontend_cache',
     'taggit',
@@ -78,6 +78,7 @@ TEMPLATES = [
 
 SITE_ID = 1
 WAGTAIL_SITE_NAME = 'Wagtail Yoast'
+WAGTAILADMIN_BASE_URL = 'http://localhost:4243'
 ROOT_URLCONF = 'urls'
 
 STATICFILES_FINDERS = [
@@ -85,7 +86,6 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 

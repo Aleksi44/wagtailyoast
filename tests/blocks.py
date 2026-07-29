@@ -2,7 +2,7 @@ import requests
 from io import BytesIO
 from django.core.files.images import ImageFile
 from wagtail.images.blocks import ImageChooserBlock
-from wagtail.core.blocks import RichTextBlock
+from wagtail.blocks import RichTextBlock
 from wagtail.images.models import Image
 
 from . import constants
