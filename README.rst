@@ -10,11 +10,15 @@ Wagtail Yoast SEO
 
 `Yoastseo <https://github.com/Yoast/javascript/tree/master/packages/yoastseo>`_ + `Wagtail <https://github.com/wagtail/wagtail>`_ = 🚀
 
-Tested with :
+Requirements
+############
 
-- django==3.0.9
-- wagtail==2.10.1
-- yoastseo:1.80.0
+- Python 3.9+
+- Django 4.2+
+- Wagtail 5.2+
+
+Continuously tested against Wagtail 5.2, 6.3 and 7.x on Python 3.9 to
+3.13. Bundles yoastseo 1.80.0.
 
 Setup
 #####
@@ -42,7 +46,7 @@ Add YoastPannel to your Page models :
 
 ::
 
-    from wagtail.admin.edit_handlers import TabbedInterface, ObjectList
+    from wagtail.admin.panels import TabbedInterface, ObjectList
     from wagtailyoast.edit_handlers import YoastPanel
 
 
@@ -98,4 +102,31 @@ Run Webpack Server
     yarn
     yarn start
 
+
+Changelog
+#########
+
+0.0.11 (unreleased)
+*******************
+
+- Fix ``ModuleNotFoundError: No module named 'pkg_resources'`` at Django
+  startup on setuptools 82 and later, which removed ``pkg_resources``.
+- Fix the panel not rendering on Wagtail 4.0 and later: the panels API
+  introduced there ignores the legacy class-level ``template``
+  attribute, so the panel silently degraded to a plain ``ObjectList``.
+- Fix the panel stylesheet never loading: it was registered on
+  ``insert_editor_css``, a hook Wagtail no longer renders.
+- Fix a custom ``keywords`` field being discarded when Wagtail clones
+  the panel, which raised ``FieldError`` on models without a field of
+  that literal name.
+- Declare runtime dependencies. ``install_requires`` was empty, so
+  ``pip install wagtailyoast`` pulled in neither Django nor Wagtail and
+  the package failed at import.
+- Declare ``python_requires`` and refresh the trove classifiers, which
+  advertised Python 3.6-3.8 while the package is tested on 3.9-3.13.
+- Stop shipping every previous release's JavaScript and CSS: packages
+  contained the built assets of all versions since 0.0.1, roughly 39 MB
+  where one version's assets are about 5 MB.
+- Add a test suite and continuous integration across Wagtail 5.2, 6.3
+  and 7.x on Python 3.9 to 3.13.
 
