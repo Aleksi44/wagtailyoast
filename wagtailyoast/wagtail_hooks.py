@@ -37,10 +37,17 @@ def yoast_panel_js():
     return js_includes + js_exec
 
 
-@hooks.register('insert_editor_css')
+@hooks.register('insert_global_admin_css')
 def yoast_panel_css():
     """
     Add Yoast styles CSS files
+
+    Registered as global admin CSS rather than editor CSS: the
+    `insert_editor_css` hook is no longer rendered by any Wagtail
+    template, so the panel's styles silently stopped loading. All
+    rules are scoped under #yoast_panel, so loading them admin-wide
+    has no effect outside the panel.
+
     :return: HTML <link>
     """
     css_files = [
